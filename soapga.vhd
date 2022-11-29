@@ -15,6 +15,8 @@ entity soapga is
         saida_serial : out std_logic;
         sseg1        : out std_logic_vector(6 downto 0);
         sseg2        : out std_logic_vector(6 downto 0);
+        sseg3        : out std_logic_vector(6 downto 0);
+        sseg4        : out std_logic_vector(6 downto 0);
         db_estado    : out std_logic_vector(6 downto 0)
     );
 end entity;
@@ -37,6 +39,7 @@ architecture soapga_arch of soapga is
             medir2           : out std_logic;
             zera_timer1      : out std_logic;
             zera_timer2      : out std_logic;
+            zera_hc          : out std_logic;
             conta_timer1     : out std_logic;
             conta_timer2     : out std_logic;
             gira_servo       : out std_logic;
@@ -59,6 +62,7 @@ architecture soapga_arch of soapga is
             partida_tx    : in std_logic;
             zera_timer1   : in std_logic;
             zera_timer2   : in std_logic;
+            zera_hc       : in std_logic;
             conta_timer1  : in std_logic;
             conta_timer2  : in std_logic;
             pwm           : out std_logic;
@@ -68,6 +72,8 @@ architecture soapga_arch of soapga is
             pronto_medir1 : out std_logic;
             sseg1         : out std_logic_vector(6 downto 0);
             sseg2         : out std_logic_vector(6 downto 0);
+            sseg3         : out std_logic_vector(6 downto 0);
+            sseg4         : out std_logic_vector(6 downto 0);
             saida_serial  : out std_logic;
             pronto_tx     : out std_logic;
             fim_timer1    : out std_logic;
@@ -85,7 +91,7 @@ architecture soapga_arch of soapga is
 
     signal s_pronto_medir1, s_pronto_medir2, s_mao_presente, s_fim_timer1, s_fim_timer2, s_pronto_tx,
            s_zera, s_medir1, s_medir2, s_zera_timer1, s_zera_timer2, s_conta_timer1, s_conta_timer2,
-           s_gira_servo, s_partida_tx : std_logic;
+           s_gira_servo, s_partida_tx, s_zera_hc : std_logic;
     
     signal s_db_estado : std_logic_vector(3 downto 0);
 	 signal s_sel : std_logic_vector(1 downto 0);
@@ -108,6 +114,7 @@ begin
             medir2          => s_medir2,
             zera_timer1     => s_zera_timer1,
             zera_timer2     => s_zera_timer2,
+            zera_hc         => s_zera_hc,
             conta_timer1    => s_conta_timer1,
             conta_timer2    => s_conta_timer2,
             gira_servo      => s_gira_servo,
@@ -129,6 +136,7 @@ begin
             partida_tx    => s_partida_tx,
             zera_timer1   => s_zera_timer1,
             zera_timer2   => s_zera_timer2,
+            zera_hc       => s_zera_hc,
             conta_timer1  => s_conta_timer1,
             conta_timer2  => s_conta_timer2,
             pwm           => pwm,
@@ -138,6 +146,8 @@ begin
             pronto_medir1 => s_pronto_medir1,
             sseg1         => sseg1,
             sseg2         => sseg2,
+            sseg3         => sseg3,
+            sseg4         => sseg4,
             saida_serial  => saida_serial,
             pronto_tx     => s_pronto_tx,
             fim_timer1    => s_fim_timer1,

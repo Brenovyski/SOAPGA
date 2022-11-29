@@ -15,6 +15,7 @@ entity soapga_fd is
         partida_tx    : in std_logic;
         zera_timer1   : in std_logic;
         zera_timer2   : in std_logic;
+        zera_hc       : in std_logic;
         conta_timer1  : in std_logic;
         conta_timer2  : in std_logic;
         pwm           : out std_logic;
@@ -24,6 +25,8 @@ entity soapga_fd is
         pronto_medir1 : out std_logic;
         sseg1         : out std_logic_vector(6 downto 0);
         sseg2         : out std_logic_vector(6 downto 0);
+        sseg3         : out std_logic_vector(6 downto 0);
+        sseg4         : out std_logic_vector(6 downto 0);
         saida_serial  : out std_logic;
         pronto_tx     : out std_logic;
         fim_timer1    : out std_logic;
@@ -163,14 +166,26 @@ begin
 
     HEX1: hex7seg
         port map(
-            hexa => s_medida2(3 downto 0),
+            hexa => s_medida1(3 downto 0),
             sseg => sseg1
         );
 
     HEX2: hex7seg
         port map(
-            hexa => s_medida2(7 downto 4),
+            hexa => s_medida1(7 downto 4),
             sseg => sseg2
+        );
+
+    HEX3: hex7seg
+        port map(
+            hexa => s_medida2(3 downto 0),
+            sseg => sseg3
+        );
+
+    HEX4: hex7seg
+        port map(
+            hexa => s_medida1(7 downto 4),
+            sseg => sseg4
         );
 
     ASCIIU: conversor_ascii
@@ -208,9 +223,9 @@ begin
             pronto        => pronto_tx
         );
 
-    TGIRO: contador_m
+    TFIM: contador_m
         generic map(
-            M => 50000000,  
+            M => 100000000,  --50000000=1s
             N => 28
         )
         port map(
@@ -222,7 +237,7 @@ begin
             meio  => open
         );
 
-    TFIM: contador_m
+    TGIRO: contador_m
         generic map(
             M => 50000000,  
             N => 28

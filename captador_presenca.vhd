@@ -11,6 +11,6 @@ end entity;
 
 architecture captador_presenca_arch of captador_presenca is
 begin
-    mao_presente <= '1' when to_integer(unsigned(medida)) < 3 else
+    mao_presente <= '1' when to_integer(unsigned(medida)) < 10 else
                     '0';
 end architecture;
