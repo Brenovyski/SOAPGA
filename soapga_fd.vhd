@@ -4,34 +4,34 @@ use ieee.numeric_std.all;
 
 entity soapga_fd is
     port (
-        clock         : in std_logic;
-        reset         : in std_logic;
-        gira_servo    : in std_logic;
-        medir2        : in std_logic;
-        medir1        : in std_logic;
-        echo2         : in std_logic;
-        echo1         : in std_logic;
-        sel           : in std_logic_vector(1 downto 0);
-        partida_tx    : in std_logic;
-        zera_timer1   : in std_logic;
-        zera_timer2   : in std_logic;
-        zera_hc       : in std_logic;
-        conta_timer1  : in std_logic;
-        conta_timer2  : in std_logic;
-        pwm           : out std_logic;
-        trigger2      : out std_logic;
-        trigger1      : out std_logic;
-        pronto_medir2 : out std_logic;
-        pronto_medir1 : out std_logic;
-        sseg1         : out std_logic_vector(6 downto 0);
-        sseg2         : out std_logic_vector(6 downto 0);
-        sseg3         : out std_logic_vector(6 downto 0);
-        sseg4         : out std_logic_vector(6 downto 0);
-        saida_serial  : out std_logic;
-        pronto_tx     : out std_logic;
-        fim_timer1    : out std_logic;
-        fim_timer2    : out std_logic;
-        mao_presente  : out std_logic
+        clock               : in std_logic;
+        reset               : in std_logic;
+        gira_servo          : in std_logic;
+        mede_sabao          : in std_logic;
+        mede_mao            : in std_logic;
+        echo_sabao          : in std_logic;
+        echo_mao            : in std_logic;
+        sel                 : in std_logic_vector(1 downto 0);
+        partida_tx          : in std_logic;
+        zera_timer_final    : in std_logic;
+        zera_timer_giro     : in std_logic;
+        zera_hc             : in std_logic;
+        conta_timer_final   : in std_logic;
+        conta_timer_giro    : in std_logic;
+        pwm                 : out std_logic;
+        trigger_sabao       : out std_logic;
+        trigger_mao         : out std_logic;
+        pronto_mede_sabao   : out std_logic;
+        pronto_mede_mao     : out std_logic;
+        sseg1               : out std_logic_vector(6 downto 0);
+        sseg2               : out std_logic_vector(6 downto 0);
+        sseg3               : out std_logic_vector(6 downto 0);
+        sseg4               : out std_logic_vector(6 downto 0);
+        saida_serial        : out std_logic;
+        pronto_tx           : out std_logic;
+        fim_timer_final     : out std_logic;
+        fim_timer_giro      : out std_logic;
+        mao_presente        : out std_logic
     );
 end entity;
 
@@ -120,7 +120,7 @@ architecture soapga_fd_arch of soapga_fd is
         );
     end component;
 
-    signal s_medida2, s_medida1 : std_logic_vector(11 downto 0);
+    signal s_medida_sabao, s_medida_mao : std_logic_vector(11 downto 0);
     signal s_uni_ascii, s_dez_ascii, dado_ascii : std_logic_vector(6 downto 0);
 
 begin
@@ -137,11 +137,11 @@ begin
         port map(
             clock      => clock,
             reset      => reset,
-            medir      => medir2,
-            echo       => echo2,
-            trigger    => trigger2,
-            medida     => s_medida2,
-            pronto     => pronto_medir2,
+            medir      => mede_sabao,
+            echo       => echo_sabao,
+            trigger    => trigger_sabao,
+            medida     => s_medida_sabao,
+            pronto     => pronto_mede_sabao,
             db_estado  => open
         );
 
@@ -149,54 +149,54 @@ begin
         port map(
             clock      => clock,
             reset      => reset,
-            medir      => medir1,
-            echo       => echo1,
-            trigger    => trigger1,
-            medida     => s_medida1,
-            pronto     => pronto_medir1,
+            medir      => mede_mao,
+            echo       => echo_mao,
+            trigger    => trigger_mao,
+            medida     => s_medida_mao,
+            pronto     => pronto_mede_mao,
             db_estado  => open
         );
 
     CAP: captador_presenca
         port map(
-            medida        =>    s_medida1,
+            medida        =>    s_medida_mao,
             mao_presente  =>    mao_presente
         );
     
 
     HEX1: hex7seg
         port map(
-            hexa => s_medida1(3 downto 0),
+            hexa => s_medida_mao(3 downto 0),
             sseg => sseg1
         );
 
     HEX2: hex7seg
         port map(
-            hexa => s_medida1(7 downto 4),
+            hexa => s_medida_mao(7 downto 4),
             sseg => sseg2
         );
 
     HEX3: hex7seg
         port map(
-            hexa => s_medida2(3 downto 0),
+            hexa => s_medida_sabao(3 downto 0),
             sseg => sseg3
         );
 
     HEX4: hex7seg
         port map(
-            hexa => s_medida1(7 downto 4),
+            hexa => s_medida_mao(7 downto 4),
             sseg => sseg4
         );
 
     ASCIIU: conversor_ascii
         port map(
-            medida_bit   => s_medida2(3 downto 0),
+            medida_bit   => s_medida_sabao(3 downto 0),
             medida_ascii => s_uni_ascii
         );
 
     ASCIID: conversor_ascii
         port map(
-            medida_bit   => s_medida2(7 downto 4),
+            medida_bit   => s_medida_sabao(7 downto 4),
             medida_ascii => s_dez_ascii
         );
 
@@ -230,10 +230,10 @@ begin
         )
         port map(
             clock => clock, 
-            zera  => zera_timer1,
-            conta => conta_timer1,
+            zera  => zera_timer_final,
+            conta => conta_timer_final,
             Q     => open,
-            fim   => fim_timer1,
+            fim   => fim_timer_final,
             meio  => open
         );
 
@@ -244,10 +244,10 @@ begin
         )
         port map(
             clock => clock,
-            zera  => zera_timer2,
-            conta => conta_timer2,
+            zera  => zera_timer_giro,
+            conta => conta_timer_giro,
             Q     => open, 
-            fim   => fim_timer2,
+            fim   => fim_timer_giro,
             meio  => open
         );
 
