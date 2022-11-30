@@ -49,7 +49,7 @@ begin
   begin
 		case posicao is
 			--when "000"  =>    s_posicao <=   35000;  -- pulso de 0,700ms 
-			when '0'  =>    s_posicao <=   45700;  -- pulso de 0,914ms
+			when '0'  =>    s_posicao <=   67150;  -- pulso de 1,343ms
 			--when "010"  =>    s_posicao <=   56450;  -- pulso de 1,129ms
 			--when "011"  =>    s_posicao <=   67150;  -- pulso de 1,343ms
 			--when "100"  =>    s_posicao <=   77850;  -- pulso de 1,557ms

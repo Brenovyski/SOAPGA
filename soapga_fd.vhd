@@ -31,7 +31,9 @@ entity soapga_fd is
         pronto_tx     : out std_logic;
         fim_timer1    : out std_logic;
         fim_timer2    : out std_logic;
-        mao_presente  : out std_logic
+        mao_presente  : out std_logic;
+        db_pronto_medir1 : out std_logic;
+        db_estado_soap : out std_logic_vector(3 downto 0)
     );
 end entity;
 
@@ -122,6 +124,7 @@ architecture soapga_fd_arch of soapga_fd is
 
     signal s_medida2, s_medida1 : std_logic_vector(11 downto 0);
     signal s_uni_ascii, s_dez_ascii, dado_ascii : std_logic_vector(6 downto 0);
+    signal s_pronto_medir1 : std_logic;
 
 begin
 
@@ -142,7 +145,7 @@ begin
             trigger    => trigger2,
             medida     => s_medida2,
             pronto     => pronto_medir2,
-            db_estado  => open
+            db_estado  => db_estado_soap
         );
 
     MEDEMAO: interface_hcsr04
@@ -153,7 +156,7 @@ begin
             echo       => echo1,
             trigger    => trigger1,
             medida     => s_medida1,
-            pronto     => pronto_medir1,
+            pronto     => s_pronto_medir1,
             db_estado  => open
         );
 
@@ -184,7 +187,7 @@ begin
 
     HEX4: hex7seg
         port map(
-            hexa => s_medida1(7 downto 4),
+            hexa => s_medida2(7 downto 4),
             sseg => sseg4
         );
 
@@ -239,7 +242,7 @@ begin
 
     TGIRO: contador_m
         generic map(
-            M => 50000000,  
+            M => 100000000,  
             N => 28
         )
         port map(
@@ -251,4 +254,6 @@ begin
             meio  => open
         );
 
+    pronto_medir1 <= s_pronto_medir1;
+    db_pronto_medir1 <= s_pronto_medir1;
 end architecture;

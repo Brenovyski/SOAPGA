@@ -122,9 +122,9 @@ with Eatual select
     medir2 <= '1'when mede_sabao, '0' when others;
 
 with Eatual select
-    sel      <= "01" when load_dez_dist, 
-                "10" when load_uni_dist,
-                "11" when load_hash_dist,  
+    sel      <= "01" when load_dez_dist | tx_dez_dist, 
+                "10" when load_uni_dist | tx_uni_dist,
+                "11" when load_hash_dist | tx_hash_dist,  
                 "00" when others;
 
 with Eatual select

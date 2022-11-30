@@ -19,7 +19,7 @@ entity soapga is
         sseg4        : out std_logic_vector(6 downto 0);
         db_estado    : out std_logic_vector(6 downto 0);
         db_pronto_medir1 : out std_logic;
-        db_estado_soap : out std_logic_vector(6 downto 0)
+        db_estado_soap : out std_logic_vector(3 downto 0)
     );
 end entity;
 
@@ -97,8 +97,8 @@ architecture soapga_arch of soapga is
            s_zera, s_medir1, s_medir2, s_zera_timer1, s_zera_timer2, s_conta_timer1, s_conta_timer2,
            s_gira_servo, s_partida_tx, s_zera_hc : std_logic;
     
-    signal s_db_estado, s_db_estado_soap : std_logic_vector(3 downto 0);
-	signal s_sel : std_logic_vector(1 downto 0);
+    signal s_db_estado : std_logic_vector(3 downto 0);
+	 signal s_sel : std_logic_vector(1 downto 0);
     
 begin
 
@@ -156,20 +156,14 @@ begin
             pronto_tx     => s_pronto_tx,
             fim_timer1    => s_fim_timer1,
             fim_timer2    => s_fim_timer2,
-            mao_presente  => s_mao_presente,
-            db_estado_soap  => s_db_estado_soap
+            mao_presente  => s_mao_presente
+            db_estado_soap  => db_estado_soap
         );
 
     UCSTATE: hex7seg
         port map(
             hexa => s_db_estado,
             sseg => db_estado
-        );
-
-    UCHCSOAO: hex7seg
-        port map(
-            hexa => s_db_estado_soap,
-            sseg => db_estado_soap
         );
 
     db_pronto_medir1 <= s_pronto_medir1;
